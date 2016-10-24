@@ -26,6 +26,8 @@ public class Game extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img, img2;
 	ImageSlider imageSlider;
+
+    private static final String TAG = "GAME";
 	
 	@Override
 	public void create () {
@@ -34,22 +36,23 @@ public class Game extends ApplicationAdapter {
 		img2 = new Texture("lizard_minion.png");
 
 		int width = Gdx.graphics.getWidth();
-		int height = 100;
+		int height = Gdx.graphics.getHeight();
+
+        Gdx.app.log(TAG, "Width:" + width);
 
 		imageSlider = new SimpleImageSlider(true, width, height);
 
-		View view = new View();
-		view.add(new Image(img));
-		imageSlider.addView(view);
+		imageSlider.addView(new Image(img));
+		imageSlider.addView(new Image(img2));
+		imageSlider.addView(new Image(img));
+		imageSlider.addView(new Image(img2));
+		imageSlider.addView(new Image(img));
+		imageSlider.addView(new Image(img2));
 
-		View v2 = new View();
-		v2.add(new Image(img2));
-
-		imageSlider.addView(v2);
 
 		imageSlider.start();
 		//imageSlider.setView(view);
-		Gdx.input.setInputProcessor(new GestureDetector(imageSlider));
+		Gdx.input.setInputProcessor(imageSlider);
 	}
 
 	@Override

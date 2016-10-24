@@ -5,7 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import java.util.ArrayList;
@@ -14,23 +16,39 @@ import java.util.List;
 public abstract class ImageSlider extends Stage implements GestureListener {
 
     protected boolean horizontal;
-    protected int currentViewId;
-    protected Table views;
+    protected int currentViewId = 0;
+    protected ScrollPane contentPane;
     protected int viewCount = 0;
+
+    protected Table contentTable;
+
+    private int width;
+    private int height;
 
     private static final String TAG = "ImageSlider";
 
     public ImageSlider(boolean horizontal, int width, int height){
         this.horizontal = horizontal;
+        this.width = width;
+        this.height = height;
         currentViewId = 0;
-        this.views = new Table();
-        this.views.setFillParent(true);
-        this.views.setPosition(width / 2, -100);
     }
 
-    public void addView(View view){
+    public void addView(Actor view){
         viewCount++;
-        views.add(view).width(Gdx.graphics.getWidth());
+        if(contentPane == null){
+            contentTable = new Table();
+            contentTable.setDebug(true);
+            contentTable.add(view).width(this.width).height(this.height);
+            contentPane = new ScrollPane(contentTable);
+            contentPane.setFillParent(true);
+            contentPane.setOverscroll(false, false);
+        }else{
+            contentTable.add(view).width(this.width).height(this.height);
+            contentPane.setWidget(contentTable);
+        }
+        this.clear();
+        this.addActor(contentPane);
     }
 
     public void setViews(List<View> views){
@@ -40,10 +58,7 @@ public abstract class ImageSlider extends Stage implements GestureListener {
     }
 
     public void start(){
-
         Gdx.app.log(TAG, "Start Called");
-        this.clear();
-        this.addActor(views);
     }
 
     public abstract void nextView();
@@ -54,50 +69,4 @@ public abstract class ImageSlider extends Stage implements GestureListener {
         this.addActor(v);
     }
 
-
-    @Override
-    public boolean touchDown(float x, float y, int pointer, int button) {
-        Gdx.app.log(TAG, "Touch Down");
-        return false;
-    }
-
-    @Override
-    public boolean tap(float x, float y, int count, int button) {
-        Gdx.app.log(TAG, "Tap");
-        return true;
-    }
-
-    @Override
-    public boolean longPress(float x, float y) {
-        Gdx.app.log(TAG, "Long Press");
-        return false;
-    }
-
-    @Override
-    public boolean fling(float velocityX, float velocityY, int button) {
-        Gdx.app.log(TAG, "Fling");
-        nextView();
-        return true;
-    }
-
-    @Override
-    public boolean pan(float x, float y, float deltaX, float deltaY) {
-        Gdx.app.log(TAG, "Pan");
-        return false;
-    }
-
-    @Override
-    public boolean panStop(float x, float y, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean zoom(float initialDistance, float distance) {
-        return false;
-    }
-
-    @Override
-    public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
-        return false;
-    }
 }
