@@ -32,27 +32,24 @@ public abstract class ImageSlider extends Stage implements GestureListener {
         this.width = width;
         this.height = height;
         currentViewId = 0;
+
+        contentTable = new Table();
+        contentPane = new ScrollPane(contentTable);
+        contentPane.setFillParent(true);
+        contentPane.setOverscroll(false, false);
+
     }
 
-    public void addView(Actor view){
+    public void addView(Table view){
         viewCount++;
-        if(contentPane == null){
-            contentTable = new Table();
-            contentTable.setDebug(true);
-            contentTable.add(view).width(this.width).height(this.height);
-            contentPane = new ScrollPane(contentTable);
-            contentPane.setFillParent(true);
-            contentPane.setOverscroll(false, false);
-        }else{
-            contentTable.add(view).width(this.width).height(this.height);
-            contentPane.setWidget(contentTable);
-        }
+        contentTable.add(view).width(this.width).height(this.height);
+        contentPane.setWidget(contentTable);
         this.clear();
         this.addActor(contentPane);
     }
 
-    public void setViews(List<View> views){
-        for(View v : views){
+    public void setViews(List<Table> views){
+        for(Table v : views){
             addView(v);
         }
     }
@@ -62,11 +59,5 @@ public abstract class ImageSlider extends Stage implements GestureListener {
     }
 
     public abstract void nextView();
-
-
-    public void setView(View v){
-        this.clear();
-        this.addActor(v);
-    }
 
 }
