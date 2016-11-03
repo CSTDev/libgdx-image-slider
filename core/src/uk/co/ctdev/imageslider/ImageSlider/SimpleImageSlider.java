@@ -14,7 +14,7 @@ public class SimpleImageSlider extends ImageSlider {
     private int width;
     private int height;
 
-    public SimpleImageSlider(Skin skin, int width, int height, Class ui) {
+    public SimpleImageSlider(Skin skin, int width, int height, Class ui) throws SliderUIException {
         super(skin, width, height, ui);
         this.width = width;
         this.height = height;
@@ -42,34 +42,54 @@ public class SimpleImageSlider extends ImageSlider {
 
     @Override
     public void nextView() {
-        Gdx.app.log(TAG, "Forward");
-        currentViewId++;
-        contentPane.setScrollX(currentViewId == 0 ? 640 : currentViewId * 640);
+        if(currentViewId < viewCount - 1) {
+            Gdx.app.log(TAG, "Forward");
+            currentViewId++;
+            contentPane.setScrollX(currentViewId == 0 ? 640 : currentViewId * 640);
+            ui.setCurrentView(currentViewId);
+        }
     }
 
     @Override
     public void prevView() {
-        Gdx.app.log(TAG, "Back");
-        currentViewId--;
+        if(currentViewId > 0) {
+            Gdx.app.log(TAG, "Back");
+            currentViewId--;
+            contentPane.setScrollX(currentViewId == 0 ? 0 : currentViewId * 640);
+            ui.setCurrentView(currentViewId);
+        }
+    }
+
+    @Override
+    public void goToView(int viewId) {
+        currentViewId = viewId;
         contentPane.setScrollX(currentViewId == 0 ? 0 : currentViewId * 640);
+        ui.setCurrentView(currentViewId);
     }
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button){
-        float scrollX = contentPane.getScrollX();
-        if(scrollX % 640 == 0){
+        float scrollX = contentPane.getVisualScrollX();
+       /* if(scrollX % 640 == 0){
             Gdx.app.log(TAG, "Not handled");
             return false;
-        }else {
+        }else {*/
             Gdx.app.log(TAG, "Middle of this view:" + ((width * currentViewId) + (width / 2)));
             Gdx.app.log(TAG, "Scroll X:" + scrollX);
+
+        //TODO More general if to find the nearest end of a view and go to that one regardless of where it is
             if ((scrollX < (width * currentViewId) + (width / 2)) &&
                     scrollX > (width * currentViewId) - (width / 2)) {
                 Gdx.app.log(TAG, "Stay");
                 contentPane.setScrollX(currentViewId * 640);
-            } else if (scrollX < (width * currentViewId) - (width / 2)) {
+            } else if(scrollX <= 0){
+                goToView(0);
+            }else if (scrollX < (width * currentViewId) - (width / 2)) {
                 Gdx.app.log(TAG, "Back");
                 prevView();
+            } else if (scrollX >= width * (viewCount - 1)){
+                Gdx.app.log(TAG, "Forward to end");
+                goToView(viewCount - 1);
             } else {
                 Gdx.app.log(TAG, "Forward");
                 nextView();
@@ -78,7 +98,7 @@ public class SimpleImageSlider extends ImageSlider {
             Gdx.app.log(TAG, "View Id:" + currentViewId);
             Gdx.app.log(TAG, "Handled");
             return true;
-        }
+        //}
     }
 
     @Override

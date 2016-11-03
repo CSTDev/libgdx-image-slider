@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import uk.co.ctdev.imageslider.ImageSlider.ImageSlider;
 import uk.co.ctdev.imageslider.ImageSlider.ImageSliderUI;
 import uk.co.ctdev.imageslider.ImageSlider.SimpleImageSlider;
+import uk.co.ctdev.imageslider.ImageSlider.SliderUI;
+import uk.co.ctdev.imageslider.ImageSlider.SliderUIException;
 import uk.co.ctdev.imageslider.ImageSlider.View;
 
 public class Game extends ApplicationAdapter {
@@ -35,11 +37,12 @@ public class Game extends ApplicationAdapter {
         Gdx.app.log(TAG, "Width:" + width);
 		Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
-		imageSlider = new SimpleImageSlider(skin, width, height, ImageSliderUI.class);
 
-
-
-
+		try {
+			imageSlider = new SimpleImageSlider(skin, width, height, ImageSliderUI.class);
+		} catch (SliderUIException e) {
+			Gdx.app.error(TAG, "Image slider not created");
+		}
 
 		View v1 = new View();
 		v1.add(new Image(img));

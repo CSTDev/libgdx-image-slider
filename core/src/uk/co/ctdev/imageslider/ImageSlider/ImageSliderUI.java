@@ -3,15 +3,19 @@ package uk.co.ctdev.imageslider.ImageSlider;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class to base the UI's off of
@@ -21,8 +25,10 @@ public class ImageSliderUI extends SliderUI implements InputProcessor{
     private static final String TAG = "IMAGESLIDERUI";
 
     private ImageSlider imageSlider;
+    private List<Button> dots;
 
     private Table dotLayout;
+    private Skin skin;
 
     public ImageSliderUI(Skin skin, ImageSlider slider){
         this(skin);
@@ -30,12 +36,13 @@ public class ImageSliderUI extends SliderUI implements InputProcessor{
     }
 
     public ImageSliderUI(Skin skin){
+        this.skin = skin;
         Table layout = new Table();
         Label label = new Label("STAGE", skin);
         layout.add(label).colspan(2);
         //Create buttons
-        Button leftButton = new Button(skin);
-        Button rightButton = new Button(skin);
+        Button leftButton = new Button(this.skin);
+        Button rightButton = new Button(this.skin);
 
         rightButton.addListener(new InputListener(){
 
@@ -106,14 +113,53 @@ public class ImageSliderUI extends SliderUI implements InputProcessor{
         Table layout = (Table)this.getActors().get(0);
         if(dotLayout == null){
             dotLayout = new Table();
-        }
-        Texture img = new Texture("lizard_minion.png");
-        if(imageSlider != null) {
-            Image dot = new Image(img);
-            dotLayout.add(dot).width(10f).height(10f);
+            dotLayout.setName("dots");
             layout.add(dotLayout).center().colspan(layout.getColumns());
+            dots = new ArrayList<Button>();
+        } else {
+            dotLayout = layout.findActor("dots");
+        }
+
+        if(imageSlider != null) {
+            final Button lButton = new Button(skin, "toggle");
+            dots.add(lButton);
+
+            lButton.addListener(new InputListener(){
+
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    return true;
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    imageSlider.goToView(dots.indexOf(lButton));
+                }
+            });
+
+            if(dots.size() == 1){
+                lButton.setChecked(true);
+            }
+            dotLayout.add(lButton).width(30f).height(30f);
+
             this.clear();
             this.addActor(layout);
         }
     }
+
+    @Override
+    public void setCurrentView(int currentView) {
+        Table layout = (Table)this.getActors().get(0);
+        Table dotTable = layout.findActor("dots");
+        ((Button)dotTable.getCells().get(currentView).getActor()).setChecked(true);
+
+        //Reset previous
+        for(Cell c : dotTable.getCells()){
+            if(c.getColumn() != currentView){
+                ((Button)c.getActor()).setChecked(false);
+            }
+        }
+
+    }
+
 }

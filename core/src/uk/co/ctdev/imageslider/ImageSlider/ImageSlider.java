@@ -36,7 +36,7 @@ public abstract class ImageSlider extends Stage implements GestureListener {
         this.height = height;
     }
 
-    public ImageSlider(Skin skin, int width, int height, Class<? extends SliderUI> ui){
+    public ImageSlider(Skin skin, int width, int height, Class<? extends SliderUI> ui) throws SliderUIException{
         this.width = width;
         this.height = height;
         currentViewId = 0;
@@ -55,8 +55,9 @@ public abstract class ImageSlider extends Stage implements GestureListener {
         }
     }
 
-    private void log(Exception e){
+    private void log(Exception e) throws SliderUIException {
         Gdx.app.error(TAG, "Unable to initialise ui.", e);
+        throw new SliderUIException("Unable to initialise ui.", e);
     }
 
     public abstract void addView(Table view);
@@ -87,4 +88,5 @@ public abstract class ImageSlider extends Stage implements GestureListener {
         return inputHandler;
     }
 
+    public abstract void goToView(int viewId);
 }
