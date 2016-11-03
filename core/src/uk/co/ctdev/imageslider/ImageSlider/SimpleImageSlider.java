@@ -74,11 +74,14 @@ public class SimpleImageSlider extends ImageSlider {
         Gdx.app.log(TAG, "Middle of this view:" + ((width * currentViewId) + (width / 2)));
         Gdx.app.log(TAG, "Scroll X:" + scrollX);
 
-        goToView(Math.round(scrollX / width));
+        if(scrollX % width != 0) {
+            goToView(Math.round(scrollX / width));
+            Gdx.app.log(TAG, "View Id:" + currentViewId);
+            Gdx.app.log(TAG, "Handled");
+            return true;
+        }
 
-        Gdx.app.log(TAG, "View Id:" + currentViewId);
-        Gdx.app.log(TAG, "Handled");
-        return true;
+        return false;
     }
 
     @Override

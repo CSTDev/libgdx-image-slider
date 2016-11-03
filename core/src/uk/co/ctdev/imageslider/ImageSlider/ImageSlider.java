@@ -89,4 +89,12 @@ public abstract class ImageSlider extends Stage implements GestureListener {
     }
 
     public abstract void goToView(int viewId);
+
+    @Override
+    public void act(){
+        super.act();
+        if(ui != null) {
+            ui.act();
+        }
+    }
 }

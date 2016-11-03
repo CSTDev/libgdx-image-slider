@@ -3,10 +3,12 @@ package uk.co.ctdev.imageslider.ImageSlider;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -113,6 +115,7 @@ public class ImageSliderUI extends SliderUI implements InputProcessor{
         Table layout = (Table)this.getActors().get(0);
         if(dotLayout == null){
             dotLayout = new Table();
+            dotLayout.addAction(Actions.fadeOut(5f));
             dotLayout.setName("dots");
             layout.add(dotLayout).center().colspan(layout.getColumns());
             dots = new ArrayList<Button>();
@@ -151,6 +154,8 @@ public class ImageSliderUI extends SliderUI implements InputProcessor{
     public void setCurrentView(int currentView) {
         Table layout = (Table)this.getActors().get(0);
         Table dotTable = layout.findActor("dots");
+        dotTable.addAction(Actions.alpha(1));
+        dotTable.addAction(Actions.fadeOut(5f));
         ((Button)dotTable.getCells().get(currentView).getActor()).setChecked(true);
 
         //Reset previous
