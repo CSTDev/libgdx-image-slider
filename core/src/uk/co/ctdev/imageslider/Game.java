@@ -58,10 +58,15 @@ public class Game extends ApplicationAdapter {
 		v3.row();
 		v3.add(new Label("Three", skin));
 
+		View v4 = new View(new Image(img), width, height);
+		v4.row();
+		v4.add(new Label("View Four", skin));
+
 
 		imageSlider.addView(v1);
 		imageSlider.addView(v2);
 		imageSlider.addView(v3);
+		imageSlider.addView(v4);
 
 
 
