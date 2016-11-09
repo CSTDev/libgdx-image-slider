@@ -1,1 +1,2 @@
+include ':imagesliderlib'
 include 'desktop', 'android', 'core'

@@ -32,7 +32,7 @@ public abstract class ImageSlider extends Stage implements GestureListener {
         this.height = height;
     }
 
-    public ImageSlider(Skin skin, int width, int height, Class<? extends SliderUI> ui) throws SliderUIException{
+    public ImageSlider(Skin skin, int width, int height, Class<? extends SliderUI> ui) throws SliderUIException {
         this.width = width;
         this.height = height;
         currentViewId = 0;

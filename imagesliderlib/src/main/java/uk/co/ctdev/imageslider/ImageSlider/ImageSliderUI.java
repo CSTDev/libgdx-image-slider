@@ -4,11 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
@@ -27,6 +25,8 @@ public class ImageSliderUI extends SliderUI implements InputProcessor{
 
     private Table dotLayout;
     private Skin skin;
+    private Button leftButton;
+    private Button rightButton;
 
     public ImageSliderUI(Skin skin, ImageSlider slider){
         this(skin);
@@ -36,11 +36,11 @@ public class ImageSliderUI extends SliderUI implements InputProcessor{
     public ImageSliderUI(Skin skin){
         this.skin = skin;
         Table layout = new Table();
-        Label label = new Label("STAGE", skin);
-        layout.add(label).colspan(2);
         //Create buttons
-        Button leftButton = new Button(this.skin);
-        Button rightButton = new Button(this.skin);
+        leftButton = new Button(this.skin, "image-slider-left");
+        rightButton = new Button(this.skin, "image-slider-right");
+        leftButton.addAction(Actions.fadeOut(5f));
+        rightButton.addAction(Actions.fadeOut(5f));
 
         rightButton.addListener(new InputListener(){
 
@@ -88,8 +88,8 @@ public class ImageSliderUI extends SliderUI implements InputProcessor{
             }
         });
 
-        leftButton.setWidth(200f);
-        rightButton.setWidth(100f);
+        /*leftButton.setWidth(200f);
+        rightButton.setWidth(100f);*/
 
         layout.row().expand();
         layout.add(leftButton).left().width(50f);
@@ -97,7 +97,7 @@ public class ImageSliderUI extends SliderUI implements InputProcessor{
         layout.row();
 
         layout.setFillParent(true);
-        layout.setDebug(true);
+        //layout.setDebug(true);
 
         this.addActor(layout);
     }
@@ -139,7 +139,7 @@ public class ImageSliderUI extends SliderUI implements InputProcessor{
             if(dots.size() == 1){
                 lButton.setChecked(true);
             }
-            dotLayout.add(lButton).width(30f).height(30f);
+            dotLayout.add(lButton).width(30f).height(30f).pad(10f);
 
             this.clear();
             this.addActor(layout);
@@ -148,10 +148,17 @@ public class ImageSliderUI extends SliderUI implements InputProcessor{
 
     @Override
     public void setCurrentView(int currentView) {
+        leftButton.addAction(Actions.alpha(1f));
+        rightButton.addAction(Actions.alpha(1f));
+        leftButton.addAction(Actions.fadeOut(5f));
+        rightButton.addAction(Actions.fadeOut(5f));
+
         Table layout = (Table)this.getActors().get(0);
         Table dotTable = layout.findActor("dots");
-        dotTable.addAction(Actions.alpha(1));
+
+        dotTable.addAction(Actions.alpha(1f));
         dotTable.addAction(Actions.fadeOut(5f));
+
         ((Button)dotTable.getCells().get(currentView).getActor()).setChecked(true);
 
         //Reset previous

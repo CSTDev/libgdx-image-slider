@@ -74,7 +74,7 @@ public class SimpleImageSlider extends ImageSlider {
         Gdx.app.log(TAG, "Middle of this view:" + ((width * currentViewId) + (width / 2)));
         Gdx.app.log(TAG, "Scroll X:" + scrollX);
 
-        if(scrollX % width != 0) {
+        if(scrollX % width != 0 || scrollX == 0 || scrollX == contentPane.getMaxX()) {
             goToView(Math.round(scrollX / width));
             Gdx.app.log(TAG, "View Id:" + currentViewId);
             Gdx.app.log(TAG, "Handled");

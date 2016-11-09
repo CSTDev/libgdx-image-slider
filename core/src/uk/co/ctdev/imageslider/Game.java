@@ -13,9 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import uk.co.ctdev.imageslider.ImageSlider.ImageSlider;
 import uk.co.ctdev.imageslider.ImageSlider.ImageSliderUI;
 import uk.co.ctdev.imageslider.ImageSlider.SimpleImageSlider;
-import uk.co.ctdev.imageslider.ImageSlider.SliderUI;
 import uk.co.ctdev.imageslider.ImageSlider.SliderUIException;
 import uk.co.ctdev.imageslider.ImageSlider.View;
+
 
 public class Game extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -62,13 +62,17 @@ public class Game extends ApplicationAdapter {
 		v4.row();
 		v4.add(new Label("View Four", skin));
 
+		Table v5 = new Table();
+		v5.add(new Image(img2));
+		v5.row();
+		v5.add(new Label("Five", skin));
+
 
 		imageSlider.addView(v1);
 		imageSlider.addView(v2);
 		imageSlider.addView(v3);
 		imageSlider.addView(v4);
-
-
+		imageSlider.addView(v5);
 
 
 
