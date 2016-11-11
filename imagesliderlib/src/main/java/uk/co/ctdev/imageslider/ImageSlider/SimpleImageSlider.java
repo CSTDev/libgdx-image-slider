@@ -45,7 +45,7 @@ public class SimpleImageSlider extends ImageSlider {
         if(currentViewId < viewCount - 1) {
             Gdx.app.log(TAG, "Forward");
             currentViewId++;
-            contentPane.setScrollX(currentViewId == 0 ? 640 : currentViewId * 640);
+            contentPane.setScrollX(currentViewId == 0 ? width : currentViewId * width);
             ui.setCurrentView(currentViewId);
         }
     }
@@ -55,7 +55,7 @@ public class SimpleImageSlider extends ImageSlider {
         if(currentViewId > 0) {
             Gdx.app.log(TAG, "Back");
             currentViewId--;
-            contentPane.setScrollX(currentViewId == 0 ? 0 : currentViewId * 640);
+            contentPane.setScrollX(currentViewId == 0 ? 0 : currentViewId * width);
             ui.setCurrentView(currentViewId);
         }
     }
@@ -63,7 +63,7 @@ public class SimpleImageSlider extends ImageSlider {
     @Override
     public void goToView(int viewId) {
         currentViewId = viewId;
-        contentPane.setScrollX(currentViewId == 0 ? 0 : currentViewId * 640);
+        contentPane.setScrollX(currentViewId == 0 ? 0 : currentViewId * width);
         ui.setCurrentView(currentViewId);
     }
 
